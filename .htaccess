@@ -1,0 +1,12 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Allow access to existing files and folders
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    
+    # Route API requests to api folder
+    RewriteRule ^api/(.+)$ api/$1.php [QSA,L]
+    
+    # Route other requests as needed
+</IfModule>

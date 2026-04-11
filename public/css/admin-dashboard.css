@@ -1,0 +1,109 @@
+/* ── Reset & base ── */
+*, *::before, *::after { box-sizing: border-box; }
+.dash-wrap { font-family: 'DM Sans', sans-serif; padding: 1.5rem; }
+
+/* ── Top bar ── */
+.dash-header { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 1.75rem; }
+.dash-header-left h4 { font-size: 20px; font-weight: 500; margin: 0 0 3px; color: var(--bs-heading-color, #34343a); }
+.dash-header-left p  { font-size: 13px; color: #888; margin: 0; }
+.badge-live { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; color: #0F6E56; background: #E1F5EE; padding: 4px 12px; border-radius: 20px; }
+.dot-pulse   { width: 7px; height: 7px; border-radius: 50%; background: #1D9E75; animation: blink 1.6s ease-in-out infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.25} }
+
+/* ── Period tabs ── */
+.period-tabs { display: flex; gap: 3px; background: #f4f5f6; padding: 3px; border-radius: 8px; }
+.period-tab  { font-size: 12px; padding: 4px 14px; border-radius: 6px; cursor: pointer; border: none; background: transparent; color: #888; font-family: 'DM Sans', sans-serif; transition: background .15s; }
+.period-tab.active { background: #fff; color: #34343a; font-weight: 500; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+
+/* ── KPI cards ── */
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; margin-bottom: 1.5rem; }
+.kpi-card  { background: #fff; border: 1px solid #f0f0f2; border-radius: 12px; padding: 1.1rem 1.2rem; transition: box-shadow .15s; }
+.kpi-card:hover { box-shadow: 0 4px 18px rgba(0,0,0,.06); }
+.kpi-icon  { width: 38px; height: 38px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-bottom: 12px; }
+.kpi-label { font-size: 12px; color: #999; margin: 0 0 5px; letter-spacing: .3px; }
+.kpi-value { font-size: 22px; font-weight: 500; margin: 0 0 5px; color: #34343a; letter-spacing: -.5px; }
+.kpi-change { font-size: 12px; display: flex; align-items: center; gap: 4px; }
+.up   { color: #0F6E56; } .down { color: #A32D2D; }
+
+/* ── Chart cards ── */
+.chart-row  { display: grid; gap: 16px; margin-bottom: 16px; }
+.chart-row.cols-3-2 { grid-template-columns: 3fr 2fr; }
+.chart-row.cols-1-1 { grid-template-columns: 1fr 1fr; }
+.chart-row.cols-3   { grid-template-columns: 1fr 1fr 1fr; }
+
+/* FIX: min-width:0 prevents grid children from overflowing their column */
+.card-panel {
+  background: #fff;
+  border: 1px solid #f0f0f2;
+  border-radius: 12px;
+  padding: 1.2rem 1.3rem;
+  min-width: 0;          /* ← key fix: allows grid item to shrink below content size */
+  overflow: hidden;      /* ← clips any child that still tries to overflow */
+}
+.card-panel:hover { box-shadow: 0 4px 18px rgba(0,0,0,.05); }
+.card-head  { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1rem; flex-wrap: wrap; gap: 6px; }
+.card-title { font-size: 14px; font-weight: 500; margin: 0 0 2px; color: #34343a; }
+.card-sub   { font-size: 12px; color: #aaa; margin: 0; }
+
+/* legend */
+.legend     { display: flex; flex-wrap: wrap; gap: 12px; font-size: 12px; color: #888; }
+.leg-item   { display: flex; align-items: center; gap: 5px; }
+.leg-dot    { width: 9px; height: 9px; border-radius: 2px; flex-shrink: 0; }
+
+/* ── Progress bars ── */
+.prog-bar-wrap { margin-bottom: 13px; }
+.prog-bar-label { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 5px; color: #555; }
+.prog-track { height: 6px; background: #f0f0f2; border-radius: 4px; overflow: hidden; }
+.prog-fill  { height: 100%; border-radius: 4px; transition: width .6s ease; }
+
+/* ── Mini stat row inside card ── */
+.mini-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: .8rem; }
+.mini-stat  { text-align: center; background: #f8f8fa; border-radius: 8px; padding: .55rem .4rem; }
+.mini-stat-val   { font-size: 15px; font-weight: 500; color: #34343a; margin: 0; }
+.mini-stat-label { font-size: 11px; color: #aaa; margin: 0; }
+
+/* ── Table ── */
+.dash-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.dash-table th { text-align: left; font-size: 11px; font-weight: 400; color: #aaa; padding: 0 0 10px; border-bottom: 1px solid #f0f0f2; text-transform: uppercase; letter-spacing: .4px; }
+.dash-table td { padding: 10px 0; border-bottom: 1px solid #f5f5f7; color: #444; vertical-align: middle; }
+.dash-table tr:last-child td { border-bottom: none; }
+
+/* ── Badges ── */
+.pill { font-size: 11px; padding: 3px 10px; border-radius: 20px; }
+.pill-green  { background: #E1F5EE; color: #0F6E56; }
+.pill-amber  { background: #FAEEDA; color: #854F0B; }
+.pill-red    { background: #FCEBEB; color: #A32D2D; }
+.pill-blue   { background: #E6F1FB; color: #185FA5; }
+.pill-purple { background: #EEEDFE; color: #3C3489; }
+
+/* ── Avatar ── */
+.ava { width: 30px; height: 30px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; margin-right: 8px; vertical-align: middle; flex-shrink: 0; }
+
+/* ── Occupancy ring ── */
+.occ-wrap { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: .5rem 0; }
+.occ-ring { position: relative; width: 130px; height: 130px; margin-bottom: 12px; }
+.occ-ring canvas { position: absolute; top:0; left:0; }
+.occ-center { position: absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+.occ-pct { font-size: 26px; font-weight: 500; color: #34343a; line-height:1; }
+.occ-lbl { font-size: 11px; color: #aaa; margin-top: 2px; }
+
+/* ── Upcoming events list ── */
+.event-item { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid #f5f5f7; }
+.event-item:last-child { border-bottom: none; }
+.event-date-badge { min-width: 42px; text-align: center; background: #f4f5f6; border-radius: 8px; padding: 6px 4px; }
+.event-date-day  { font-size: 18px; font-weight: 500; color: #34343a; line-height:1; }
+.event-date-mon  { font-size: 10px; color: #aaa; text-transform: uppercase; letter-spacing:.3px; }
+.event-info-name { font-size: 13px; font-weight: 500; color: #34343a; margin: 0 0 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.event-info-meta { font-size: 12px; color: #aaa; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .chart-row.cols-3-2,
+  .chart-row.cols-1-1,
+  .chart-row.cols-3    { grid-template-columns: 1fr; }
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+  .kpi-grid { grid-template-columns: 1fr 1fr; }
+  .dash-wrap { padding: 1rem; }
+}
