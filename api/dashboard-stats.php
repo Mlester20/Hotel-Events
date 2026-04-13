@@ -137,15 +137,15 @@ try {
                         e.location,
                         e.capacity,
                         e.price,
-                        eb.booking_date  AS event_date,
+                        eb.booking_date_start  AS event_date,
                         eb.start_time    AS event_time,
                         eb.status,
                         eb.number_of_guests
                     FROM event_bookings eb
                     JOIN events e ON eb.event_id = e.id
-                    WHERE eb.booking_date >= CURDATE()
+                    WHERE eb.booking_date_start >= CURDATE()
                     AND eb.status NOT IN ('cancelled')
-                    ORDER BY eb.booking_date ASC
+                    ORDER BY eb.booking_date_start ASC
                     LIMIT 5";
 
     $eventsResult  = $conn->query($eventsQuery);

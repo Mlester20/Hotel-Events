@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 11, 2026 at 03:41 PM
+-- Generation Time: Apr 12, 2026 at 03:09 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -74,10 +74,7 @@ CREATE TABLE `events` (
 --
 
 INSERT INTO `events` (`id`, `title`, `description`, `location`, `capacity`, `price`, `created_at`, `updated_at`) VALUES
-(2, 'Grand Wedding Package', 'Full-service wedding setup including stage, basic sound system, and elegant lighting.', 'Grand Ballroom', 300, 25000.00, '2026-04-11 13:23:18', '2026-04-11 13:23:18'),
-(3, 'Corporate Seminar', 'Professional setup for business meetings, equipped with projector and high-speed Wi-Fi.', 'Conference Room A', 50, 8000.00, '2026-04-11 13:23:18', '2026-04-11 13:23:18'),
-(4, 'Birthday Bash (Indoor)', 'Vibrant party setup perfect for children\'s parties or debut celebrations.', 'Activity Hall', 150, 12000.00, '2026-04-11 13:23:18', '2026-04-11 13:23:18'),
-(6, 'Tech Workshop/Hackathon', 'Large space with multiple power outlets and modular seating for collaborative work.', 'Innovation Hub', 100, 15000.00, '2026-04-11 13:23:18', '2026-04-11 13:23:18');
+(10, 'Elegant Garden Wedding Ceremony', 'A romantic outdoor wedding setup featuring floral arch designs, aisle decorations, and ambient string lights. Includes ceremony seating arrangement, sound system for vows, and optional wedding coordinator assistance.', 'Hotel Garden / Outdoor Lawn Area', 35, 23500.00, '2026-04-12 12:45:36', '2026-04-12 12:45:36');
 
 -- --------------------------------------------------------
 
@@ -90,7 +87,8 @@ CREATE TABLE `event_bookings` (
   `event_booking_id` varchar(20) DEFAULT NULL,
   `user_id` int(11) NOT NULL,
   `event_id` int(11) DEFAULT NULL,
-  `booking_date` date DEFAULT NULL,
+  `booking_date_start` date DEFAULT NULL,
+  `booking_date_end` date DEFAULT NULL,
   `start_time` time DEFAULT NULL,
   `number_of_guests` int(11) DEFAULT NULL,
   `total_price` decimal(10,2) DEFAULT NULL,
@@ -100,6 +98,13 @@ CREATE TABLE `event_bookings` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `event_bookings`
+--
+
+INSERT INTO `event_bookings` (`id`, `event_booking_id`, `user_id`, `event_id`, `booking_date_start`, `booking_date_end`, `start_time`, `number_of_guests`, `total_price`, `status`, `payment_status`, `special_requests`, `created_at`, `updated_at`) VALUES
+(1, ' BK-R9W965S149SO', 4, 10, '2026-04-14', '2026-04-15', '20:57:30', 30, 2500.00, 'pending', 'paid', NULL, '2026-04-12 12:57:30', '2026-04-12 13:01:18');
 
 -- --------------------------------------------------------
 
@@ -293,13 +298,13 @@ ALTER TABLE `bookings`
 -- AUTO_INCREMENT for table `events`
 --
 ALTER TABLE `events`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `event_bookings`
 --
 ALTER TABLE `event_bookings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `home_descriptions`

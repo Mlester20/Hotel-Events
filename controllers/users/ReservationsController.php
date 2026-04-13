@@ -1,7 +1,5 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+session_start();
 
 require_once __DIR__ . '/../../models/users/RoomReservationsModel.php';
 require_once __DIR__ . '/../../db/config/config.php';

@@ -1,8 +1,12 @@
 <?php
+session_start(); 
+
 require_once __DIR__ . '/../../../controllers/users/home.php';
 require_once __DIR__ . '/../../../middleware/auth.php';
 require_once __DIR__ . '/../../../controllers/users/ReservationsController.php';
+require_once __DIR__ . '/../../../controllers/users/events.php';
 allowOnly(['user']);
+
 ?>
 
 <!DOCTYPE html>

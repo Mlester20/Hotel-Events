@@ -60,7 +60,7 @@ allowOnly(['user']);
                             </div>
                             <div class="mb-3 pb-2 border-bottom">
                                 <small class="text-muted d-block">Account Role</small>
-                                <span class="badge bg-label-primary"><?php echo ucfirst($user['role'] ?? '—'); ?></span>
+                                <span class="bg-label-primary"><?php echo ucfirst($user['role'] ?? '—'); ?></span>
                             </div>
                             <div class="mb-2">
                                 <small class="text-muted d-block">Member Since</small>

@@ -47,7 +47,26 @@ require_once __DIR__ . '/../BaseModel.php';
         }
 
         public function update($id, $data){
-            
+            try{
+                $query = "UPDATE {$this->events} SET title = ?, description = ?, location = ?, capacity = ?, price = ? WHERE id = ?";
+                
+                $stmt = $this->con->prepare($query);
+                $stmt->bind_param(
+                    "sssiii", 
+                    $data['title'], 
+                    $data['description'], 
+                    $data['location'], 
+                    $data['capacity'], 
+                    $data['price'],
+                    $id
+                );
+
+                if(!$stmt->execute()){
+                    throw new Exception("Failed to update event: " . $stmt->error);
+                }
+            }catch(Exception $e){
+                throw new Exception("Error updating event: " . $e->getMessage());
+            }
         }
 
         public function delete($id){
