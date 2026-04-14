@@ -1,12 +1,3 @@
-/**
- * reservations.js
- * Handles room search, display, and booking logic for the reservations page.
- * APIs used:
- *  GET  /api/room-types       → populate room type filter
- *  GET  /api/available-rooms  → search available rooms
- *  POST /api/book-room        → create a booking
- */
-
 document.addEventListener('DOMContentLoaded', () => {
 
     /* ───────────────────────────────────────────────

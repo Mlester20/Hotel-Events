@@ -4,7 +4,7 @@ require_once __DIR__ . '/../BaseModel.php';
     class EventsModel extends BaseModel {
         protected $events = 'events';
 
-        public function get(){
+        public function index(){
             try{
                 $query = "SELECT * FROM {$this->events} LIMIT 3";
                 $stmt = $this->con->prepare($query);

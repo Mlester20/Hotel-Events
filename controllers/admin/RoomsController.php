@@ -4,152 +4,167 @@ session_start();
 require_once __DIR__ . '/../../models/admin/RoomsModel.php';
 require_once __DIR__ . '/../../db/config/config.php';
 require_once __DIR__ . '/../../helpers/message.php';
+require_once __DIR__ . '/../Controller.php';
 
+    class RoomsController extends Controller {
 
-    try{
-        $roomsModel = new RoomsModel($con);
-        $rooms = $roomsModel->index();
-    } catch(Exception $e){
-        echo "Error: " . $e->getMessage();
-    }
-
-    if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['createRoom'])){
-        $room_number   = trim($_POST['number'] ?? '');
-        $room_type_id  = $_POST['room_type_id'] ?? '';
-        $amenities     = $_POST['amenities'] ?? '';
-        $images        = $_FILES['images'] ?? null;
-        $price_hourly  = $_POST['price_hourly'] ?? 0;
-        $price_overnight = $_POST['price_overnight'] ?? 0;
-        $price_day     = $_POST['price_day'] ?? 0;
-
-        if(empty($room_number) || empty($room_type_id)){
-            $_SESSION['error'] = "Please fill in all required fields.";
-            header("Location: ../../../resources/views/admin/rooms.php");
-            exit();
+        public function __construct($model) {
+            parent::__construct($model);
         }
 
-        // Guard against missing/empty file upload
-        $imageNames = [];
-        if($images && !empty($images['name'][0])){
-            foreach($images['name'] as $key => $imageName){
-                $imageData = [
-                    'name'     => $images['name'][$key],
-                    'tmp_name' => $images['tmp_name'][$key]
-                ];
-                $storedImageName = $roomsModel->storeImage($imageData);
-                if($storedImageName){
-                    $imageNames[] = $storedImageName;
+        public function index() {
+            try {
+                return $this->model->index();
+            } catch (Exception $e) {
+                throw new Exception("Error fetching rooms: " . $e->getMessage());
+            }
+        }
+
+        public function create($data) {
+            // ── Validation ──────────────────────────────────────────
+            if (empty($data['room_number']) || empty($data['room_type_id'])) {
+                setFlash("danger", "Please fill in all required fields.");
+                header("Location: ../../../resources/views/admin/rooms.php");
+                exit();
+            }
+
+            // ── Image handling ───────────────────────────────────────
+            $imageNames = [];
+            $images = $data['images'] ?? null; // comes from $_FILES['images']
+
+            if ($images && !empty($images['name'][0])) {
+                foreach ($images['name'] as $key => $imageName) {
+                    $imageData = [
+                        'name'     => $images['name'][$key],
+                        'tmp_name' => $images['tmp_name'][$key],
+                    ];
+                    $stored = $this->model->storeImage($imageData);
+                    if ($stored) $imageNames[] = $stored;
                 }
             }
-        }
 
-        // amenities is now a plain string from the textarea (not an array)
-        $amenitiesArray = array_filter(array_map('trim', explode(',', $amenities)));
+            // ── Amenities parsing ─────────────────────────────────────
+            $amenitiesArray = $this->parseAmenities($data['amenities'] ?? '');
 
-        $roomData = [
-            'room_number'     => $room_number,
-            'room_type_id'    => $room_type_id,
-            'amenities'       => json_encode(array_values($amenitiesArray)),
-            'images'          => json_encode($imageNames),
-            'price_hourly'    => $price_hourly,
-            'price_overnight' => $price_overnight,
-            'price_day'       => $price_day
-        ];
+            // ── Build payload ─────────────────────────────────────────
+            $roomData = [
+                'room_number'     => $data['room_number'],
+                'room_type_id'    => $data['room_type_id'],
+                'amenities'       => json_encode($amenitiesArray),
+                'images'          => json_encode($imageNames),
+                'price_hourly'    => $data['price_hourly']    ?? 0,
+                'price_overnight' => $data['price_overnight'] ?? 0,
+                'price_day'       => $data['price_day']       ?? 0,
+            ];
 
-        try{
-            $create = $roomsModel->create($roomData);
-            if($create){
+            try {
+                $this->model->create($roomData);
                 setFlash("success", "Room created successfully.");
+            } catch (Exception $e) {
+                setFlash("danger", "Error: " . $e->getMessage());
+            }
+
+            header("Location: ../../../resources/views/admin/rooms.php");
+            exit();
+        }
+
+        public function update($id, $data) {
+            // ── Validation ────────────────────────────────────────────
+            if (empty($id) || empty($data['room_number']) || empty($data['room_type_id'])) {
+                setFlash("danger", "Please fill in all required fields.");
                 header("Location: ../../../resources/views/admin/rooms.php");
                 exit();
+            }
+
+            // ── Image handling ────────────────────────────────────────
+            $images = $data['images'] ?? null; // comes from $_FILES['images']
+
+            if (!empty($images['name'][0])) {
+                $imagePaths = [];
+                foreach ($images['tmp_name'] as $key => $tmp_name) {
+                    $imageData = [
+                        'name'     => $images['name'][$key],
+                        'tmp_name' => $tmp_name,
+                    ];
+                    $stored = $this->model->storeImage($imageData);
+                    if ($stored) $imagePaths[] = $stored;
+                }
+                $imagesJson = json_encode($imagePaths);
             } else {
-                setFlash("error", "Failed to create room.");
-                header("Location: ../../../resources/views/admin/rooms.php");
-                exit();
+                // Keep existing images if no new ones uploaded
+                $existing   = $this->model->find($id);
+                $imagesJson = $existing['images'] ?? json_encode([]);
             }
-        } catch(Exception $e){
-            setFlash("error", "Error: " . $e->getMessage());
+
+            // ── Amenities parsing ─────────────────────────────────────
+            $amenitiesArray = $this->parseAmenities($data['amenities'] ?? '');
+
+            // ── Build payload ─────────────────────────────────────────
+            $roomData = [
+                'room_number'     => $data['room_number'],
+                'room_type_id'    => $data['room_type_id'],
+                'amenities'       => json_encode($amenitiesArray),
+                'images'          => $imagesJson,
+                'price_hourly'    => $data['price_hourly']    ?? 0,
+                'price_overnight' => $data['price_overnight'] ?? 0,
+                'price_day'       => $data['price_day']       ?? 0,
+            ];
+
+            try {
+                $this->model->update($id, $roomData);
+                setFlash("success", "Room updated successfully.");
+            } catch (Exception $e) {
+                setFlash("danger", "Error updating room: " . $e->getMessage());
+            }
+
             header("Location: ../../../resources/views/admin/rooms.php");
             exit();
+        }
+
+        public function delete($id) {
+            try {
+                $this->model->delete($id);
+                setFlash("success", "Room deleted successfully.");
+            } catch (Exception $e) {
+                setFlash("danger", "Error deleting room: " . $e->getMessage());
+            }
+
+            header("Location: ../../../resources/views/admin/rooms.php");
+            exit();
+        }
+
+        private function parseAmenities($raw): array {
+            if (is_array($raw)) {
+                $raw = implode(',', $raw);
+            }
+            return array_values(array_filter(array_map('trim', explode(',', $raw))));
         }
     }
 
-    // Handle update room
-    if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['updateRoom'])){
-        $roomId          = $_POST['id']               ?? '';
-        $room_number     = trim($_POST['room_number'] ?? '');
-        $room_type_id    = $_POST['room_type_id']     ?? '';
-        $price_hourly    = $_POST['price_hourly']     ?? 0;
-        $price_overnight = $_POST['price_overnight']  ?? 0;
-        $price_day       = $_POST['price_day']        ?? 0;
-        $rawAmenities = $_POST['amenities'] ?? '';
-        if(is_array($rawAmenities)){
-            $amenitiesFlat = implode(',', $rawAmenities);
-        } else {
-            $amenitiesFlat = $rawAmenities;
-        }
-        $amenitiesArray = array_values(array_filter(array_map('trim', explode(',', $amenitiesFlat))));
-        $amenitiesJson  = json_encode($amenitiesArray);
+    // ─── Bootstrap: instantiate and dispatch ──────────────────────────────────────
+    $roomsModel      = new RoomsModel($con);
+    $roomsController = new RoomsController($roomsModel);
 
-        if(empty($roomId) || empty($room_number) || empty($room_type_id)){
-            setFlash("error", "Please fill in all required fields.");
-            header("Location: ../../../resources/views/admin/rooms.php");
-            exit();
-        }
-        if(!empty($_FILES['images']['name'][0])){
-            $imagePaths = [];
-            foreach($_FILES['images']['tmp_name'] as $key => $tmp_name){
-                $imageData = [
-                    'name'     => $_FILES['images']['name'][$key],
-                    'tmp_name' => $tmp_name
-                ];
-                $stored = $roomsModel->storeImage($imageData);
-                if($stored) $imagePaths[] = $stored;
-            }
-            $imagesJson = json_encode($imagePaths);
-        } else {
-            $existing   = $roomsModel->find($roomId);
-            $imagesJson = $existing['images'] ?? json_encode([]);
+    // Expose $rooms so the view can use it
+    $rooms = $roomsController->index();
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+        if (isset($_POST['createRoom'])) {
+            $roomsController->create([
+                ...$_POST,                          // room_number, room_type_id, prices, amenities
+                'images' => $_FILES['images'] ?? null
+            ]);
         }
 
-        $roomData = [
-            'room_number'     => $room_number,
-            'room_type_id'    => $room_type_id,
-            'amenities'       => $amenitiesJson,
-            'images'          => $imagesJson,
-            'price_hourly'    => $price_hourly,
-            'price_overnight' => $price_overnight,
-            'price_day'       => $price_day,
-        ];
-
-        try{
-            $update = $roomsModel->update($roomId, $roomData);
-            if($update){
-                setFlash("success", "Room updated successfully!");
-            } else {
-                setFlash("error", "Something went wrong, try again!");
-            }
-        } catch(Exception $e){
-            setFlash("error", "Error: " . $e->getMessage());
+        if (isset($_POST['updateRoom'])) {
+            $roomsController->update($_POST['id'], [
+                ...$_POST,
+                'images' => $_FILES['images'] ?? null
+            ]);
         }
 
-        header("Location: ../../../resources/views/admin/rooms.php");
-        exit();
-    }
-
-    // Handle delete room
-    if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deleteRoom'])){
-        $roomId = $_POST['id'];
-        $delete = $roomsModel->delete($roomId);
-        if($delete){
-            setFlash("success", "Room deleted successfully.");
-            header("Location: ../../../resources/views/admin/rooms.php");
-            exit();
-        } else {
-            setFlash("error", "Failed to delete room.");
-            header("Location: ../../../resources/views/admin/rooms.php");
-            exit();
+        if (isset($_POST['deleteRoom'])) {
+            $roomsController->delete($_POST['id']);
         }
     }
-
-?>
