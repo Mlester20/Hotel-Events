@@ -14,8 +14,9 @@ require_once __DIR__ . '/../../db/config/config.php';
     }
 
     if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['createEvent'])){
+
         $title = $_POST['title'] ?? '';
-        $description = $_POST['Description'] ?? '';
+        $description = $_POST['description'] ?? '';
         $location = $_POST['location'] ?? '';
         $capacity = $_POST['capacity'] ?? '';
         $price = $_POST['price'] ?? '';
@@ -48,6 +49,45 @@ require_once __DIR__ . '/../../db/config/config.php';
             exit();
         }catch(Exception $e){
             setFlash('error', 'Error creating event: ' . $e->getMessage());
+        }
+    }
+
+    if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['updateEvent'])){
+        $eventId = $_POST['id'] ?? '';
+        $title = $_POST['title'] ?? '';
+        $description = $_POST['description'] ?? '';
+        $location = $_POST['location'] ?? '';
+        $capacity = $_POST['capacity'] ?? '';
+        $price = $_POST['price'] ?? '';
+
+        //validation to avoid being passed an negative value for capacity and price
+        if($capacity < 0){
+            setFlash('error', 'Capacity cannot be negative.');
+            header('Location: ../../../resources/views/admin/events.php');
+            exit();
+        }
+
+        if($price < 0){
+            setFlash('error', 'Price cannot be negative.');
+            header('Location: ../../../resources/views/admin/events.php');
+            exit();
+        }
+
+        $data = [
+            'title' => $title,
+            'description' => $description,
+            'location' => $location,
+            'capacity' => $capacity,
+            'price' => $price
+        ];
+
+        try{
+            $eventsModel->update($eventId, $data);
+            setFlash('success', 'Event updated successfully!');
+            header('Location: ../../../resources/views/admin/events.php');
+            exit();
+        }catch(Exception $e){
+            setFlash('error', 'Error updating event: ' . $e->getMessage());
         }
     }
 

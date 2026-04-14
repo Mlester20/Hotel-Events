@@ -1,5 +1,4 @@
 <?php
-session_start();
 
 require_once __DIR__ . '/../../models/users/HomeModel.php';
 require_once __DIR__ . '/../../db/config/config.php';

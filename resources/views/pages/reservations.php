@@ -20,6 +20,11 @@ allowOnly(['user']);
     
     <?php require_once 'layout/navbar.php'; ?>
 
+    <!-- Toast Container -->
+    <div id="toastContainer" 
+        style="position:fixed;top:1.25rem;right:1.25rem;z-index:9999;display:flex;flex-direction:column;gap:.5rem;min-width:320px;">
+    </div>
+
     <div class="container mt-5 mb-5">
         <!-- Header Section -->
         <div class="row mb-5">
@@ -211,6 +216,6 @@ allowOnly(['user']);
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../../../public/js/home/reservations.js"></script>
+    <script src="../../../public/js//home/reservations.js"></script>
 </body>
 </html>

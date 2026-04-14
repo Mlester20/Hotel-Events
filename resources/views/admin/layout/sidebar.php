@@ -100,7 +100,7 @@
           </a>
           <ul class="menu-sub">
             <li class="menu-item"><a href="room-reservation.php" class="menu-link"><div>Room Reservations</div></a></li>
-            <li class="menu-item"><a href="#" class="menu-link"><div>Event Reservations</div></a></li>
+            <li class="menu-item"><a href="event-reservation.php" class="menu-link"><div>Event Reservations</div></a></li>
           </ul>
         </li>
 

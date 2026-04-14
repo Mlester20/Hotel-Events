@@ -68,7 +68,7 @@ allowOnly(['admin']);
                         </div>
                         <div class="mb-3">
                             <label for="eventDate" class="form-label">Price</label>
-                            <input type="number" class="form-control" id="price" name="event_date" step="0.01">
+                            <input type="number" class="form-control" id="price" name="price" step="0.01">
                         </div>
                         <div class="text-end">
                             <button type="submit" class="btn btn-primary" name="createEvent">Save</button>
@@ -79,6 +79,92 @@ allowOnly(['admin']);
         </div>
     </div>
 
+    <!-- Edit Event Modal -->
+    <div class="modal fade" id="editEventsModal" tabindex="-1" aria-labelledby="editEventsModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editEventsModalLabel">Edit Event</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="../../../controllers/admin/EventsController.php">
+                        <input type="hidden" id="editEventId" name="id">
+                        <div class="mb-3">
+                            <label for="editEventTitle" class="form-label">Event Title</label>
+                            <input type="text" class="form-control" id="Edittitle" name="title"
+                                placeholder="Enter event title">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editEventDescription" class="form-label">Description</label>
+                            <textarea class="form-control" id="Editdescription" name="description" rows="3"
+                                placeholder="Enter event Description"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editEventLocation" class="form-label">Location</label>
+                            <input type="text" class="form-control" id="Editlocation" name="location"
+                                placeholder="Enter event location">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editEventCapacity" class="form-label">Capacity</label>
+                            <input type="number" class="form-control" id="Editcapacity" name="capacity"
+                                placeholder="Enter event capacity">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editEventPrice" class="form-label">Price</label>
+                            <input type="number" class="form-control" id="Editprice" name="price" step="0.01">
+                        </div>
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-primary" name="updateEvent">Update</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Event Modal -->
+    <div class="modal fade" id="viewEventModal" tabindex="-1" aria-labelledby="viewEventModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="viewEventModalLabel">Event Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-borderless mb-0">
+                        <tbody>
+                            <tr>
+                                <th class="text-muted fw-normal ps-0" style="width: 120px;">Title</th>
+                                <td id="viewTitle"></td>
+                            </tr>
+                            <tr>
+                                <th class="text-muted fw-normal ps-0" style="width: 120px;">Description</th>
+                                <td id="viewDescription"></td>
+                            </tr>
+                            <tr>
+                                <th class="text-muted fw-normal ps-0">Location</th>
+                                <td id="viewLocation"></td>
+                            </tr>
+                            <tr>
+                                <th class="text-muted fw-normal ps-0">Capacity</th>
+                                <td id="viewCapacity"></td>
+                            </tr>
+                            <tr>
+                                <th class="text-muted fw-normal ps-0">Price</th>
+                                <td id="viewPrice"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+            
+
     <div class="card mt-4">
         <h5 class="card-header">Manage Events</h5>
         <div class="table-responsive nowrap">
@@ -86,8 +172,8 @@ allowOnly(['admin']);
                 <thead>
                     <tr>
                         <th>Title</th>
-                        <th>Description</th>
                         <th>Capacity</th>
+                        <th>Price</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -96,20 +182,46 @@ allowOnly(['admin']);
                         <?php foreach($events as $event): ?>
                             <tr>
                                 <td><?php echo htmlspecialchars($event['title']); ?></td>
-                                <td><?php echo htmlspecialchars($event['description']); ?></td>
                                 <td><?php echo htmlspecialchars($event['capacity']); ?></td>
+                                <td><?php echo htmlspecialchars($event['price']); ?></td>
                                 <td>
                                     <!-- Action buttons (Edit/Delete) can be added here -->
-                                    <button class="btn btn-sm btn-primary">
-                                        <i class="fas fa-edit"></i>
+                                    <button
+                                        class="btn btn-sm btn-warning"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#editEventsModal"
+                                        onclick='editEvent(
+                                            <?php echo $event["id"]; ?>,
+                                            <?php echo json_encode($event["title"]); ?>,
+                                            <?php echo json_encode($event["description"]); ?>,
+                                            <?php echo json_encode($event["location"]); ?>,
+                                            <?php echo $event["capacity"]; ?>,
+                                            <?php echo json_encode($event["price"]); ?>
+                                        )'>
+                                        <i class="fas fa-pencil"></i>
                                     </button>
+
+                                    <!-- view modal -->
+                                        <button
+                                            class="btn btn-sm btn-info"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#viewEventModal"
+                                            onclick='viewEvent(
+                                                <?php echo $event["id"]; ?>,
+                                                <?php echo json_encode($event["title"]); ?>,
+                                                <?php echo json_encode($event["description"]); ?>,
+                                                <?php echo json_encode($event["location"]); ?>,
+                                                <?php echo $event["capacity"]; ?>,
+                                                <?php echo json_encode($event["price"]); ?>
+                                            )'>
+                                            <i class="fas fa-eye"></i>
+                                        </button>
 
                                     <!-- delete -->
                                     <form action="../../../controllers/admin/EventsController.php" method="POST" style="display: inline;">
                                         <input type="hidden" name="id" value="<?php echo $event['id']; ?>">
                                         
                                         <button 
-                                            type="submit" 
                                             name="deleteRoomType" 
                                             class="btn btn-sm btn-danger" 
                                             onclick="return confirm('Are you sure?')">

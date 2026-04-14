@@ -1,8 +1,8 @@
 <?php
-require_once __DIR__ . '/../../../controllers/users/home.php';
+require_once __DIR__ . '/../../../controllers/users/ClientController.php'; // one controller to rule them all
 require_once __DIR__ . '/../../../middleware/auth.php';
-require_once __DIR__ . '/../../../controllers/users/ReservationsController.php';
 allowOnly(['user']);
+
 ?>
 
 <!DOCTYPE html>
