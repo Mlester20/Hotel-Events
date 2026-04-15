@@ -1,0 +1,262 @@
+
+      /* ── Design tokens ─────────────────────────────────────── */
+      :root {
+        --bg:          #0f1117;
+        --surface-5:     #181c27;
+        --surface-6:   #1f2436;
+        --border:      #2a3045;
+        --text:        #e8eaf0;
+        --muted:       #6b7394;
+        --accent:      #c8a96e;
+        --accent-dim:  rgba(200,169,110,.12);
+        --green:       #4caf7d;
+        --green-dim:   rgba(76,175,125,.13);
+        --red:         #e05c5c;
+        --red-dim:     rgba(224,92,92,.13);
+        --yellow:      #f0c040;
+        --yellow-dim:  rgba(240,192,64,.13);
+        --blue:        #6b9fdb;
+        --blue-dim:    rgba(107,159,219,.13);
+        --radius:      10px;
+        --font-head:   'DM Serif Display', serif;
+        --font-body:   'DM Sans', sans-serif;
+      }
+
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      body {
+        font-family: var(--font-body);
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+      }
+
+      /* ── Page shell ────────────────────────────────────────── */
+      .page-wrapper {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 2.5rem 2rem;
+      }
+
+      /* ── Header ────────────────────────────────────────────── */
+      .page-header {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        margin-bottom: 2rem;
+        padding-bottom: 1.25rem;
+        border-bottom: 1px solid var(--border);
+      }
+      .page-header h1 {
+        font-family: var(--font-head);
+        font-size: 2rem;
+        color: var(--accent);
+        letter-spacing: .02em;
+        line-height: 1;
+      }
+      .page-header p {
+        color: var(--muted);
+        font-size: .85rem;
+        margin-top: .3rem;
+      }
+
+      /* ── Toast ─────────────────────────────────────────────── */
+      #toast-box {
+        position: fixed;
+        top: 1.5rem;
+        right: 1.5rem;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        gap: .5rem;
+      }
+      .toast-msg {
+        display: flex;
+        align-items: center;
+        gap: .6rem;
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: .7rem 1rem;
+        font-size: .85rem;
+        min-width: 240px;
+        animation: slideIn .25s ease;
+        box-shadow: 0 8px 24px rgba(0,0,0,.4);
+      }
+      .toast-msg.ok  { border-left: 3px solid var(--green); }
+      .toast-msg.err { border-left: 3px solid var(--red);   }
+      @keyframes slideIn {
+        from { transform: translateX(20px); opacity: 0; }
+        to   { transform: translateX(0);   opacity: 1; }
+      }
+
+      /* ── Filters ───────────────────────────────────────────── */
+      .filters {
+        display: flex;
+        gap: .75rem;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+      .filter-btn {
+        padding: .35rem .9rem;
+        border-radius: 20px;
+        border: 1px solid var(--border);
+        background: transparent;
+        color: var(--muted);
+        font-family: var(--font-body);
+        font-size: .8rem;
+        cursor: pointer;
+        transition: all .2s;
+      }
+      .filter-btn:hover,
+      .filter-btn.active {
+        background: var(--accent-dim);
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+      .search-wrap {
+        margin-left: auto;
+        position: relative;
+      }
+      .search-wrap i {
+        position: absolute;
+        left: .75rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--muted);
+        font-size: .85rem;
+        pointer-events: none;
+      }
+      #searchInput {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        color: var(--text);
+        padding: .45rem .75rem .45rem 2.2rem;
+        font-family: var(--font-body);
+        font-size: .85rem;
+        width: 220px;
+        transition: border-color .2s;
+      }
+      #searchInput:focus { outline: none; border-color: var(--accent); }
+
+      /* ── Table card ────────────────────────────────────────── */
+      .table-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        overflow: hidden;
+      }
+      .res-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: .85rem;
+      }
+      .res-table thead tr {
+        background: var(--surface-2);
+        border-bottom: 1px solid var(--border);
+      }
+      .res-table th {
+        padding: .85rem 1rem;
+        text-align: left;
+        color: var(--muted);
+        font-weight: 500;
+        font-size: .75rem;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+      .res-table tbody tr {
+        border-bottom: 1px solid var(--border);
+        transition: background .15s;
+      }
+      .res-table tbody tr:last-child { border-bottom: none; }
+      .res-table tbody tr:hover { background: var(--surface-2); }
+      .res-table td {
+        padding: .9rem 1rem;
+        vertical-align: middle;
+      }
+
+      /* ── Booking ID ─────────────────────────────────────────── */
+      .booking-id {
+        font-family: 'Courier New', monospace;
+        font-size: .78rem;
+        color: var(--accent);
+        letter-spacing: .04em;
+      }
+
+      /* ── Guest cell ─────────────────────────────────────────── */
+      .guest-name  { font-weight: 500; }
+      .guest-email { color: var(--muted); font-size: .78rem; margin-top: .1rem; }
+
+      /* ── Date cell ──────────────────────────────────────────── */
+      .date-range {
+        display: flex;
+        flex-direction: column;
+        gap: .15rem;
+        white-space: nowrap;
+      }
+      .date-range .label {
+        font-size: .7rem;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: .05em;
+      }
+
+      /* ── Price ──────────────────────────────────────────────── */
+      .price { font-weight: 600; }
+
+      /* ── Badges ─────────────────────────────────────────────── */
+      .badge-pill {
+        display: inline-block;
+        padding: .2rem .65rem;
+        border-radius: 20px;
+        font-size: .73rem;
+        font-weight: 500;
+        white-space: nowrap;
+      }
+      /* Booking status */
+      .s-pending   { background: var(--yellow-dim); color: var(--yellow); }
+      .s-confirmed { background: var(--blue-dim);   color: var(--blue);   }
+      .s-cancelled { background: var(--red-dim);    color: var(--red);    }
+      .s-completed { background: var(--green-dim);  color: var(--green);  }
+      /* Payment status */
+      .p-unpaid         { background: var(--red-dim);    color: var(--red);    }
+      .p-partially_paid { background: var(--yellow-dim); color: var(--yellow); }
+      .p-paid           { background: var(--green-dim);  color: var(--green);  }
+
+      /* ── Inline select dropdowns ─────────────────────────────── */
+      .inline-select {
+        appearance: none;
+        -webkit-appearance: none;
+        background: var(--surface-2) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%236b7394'/%3E%3C/svg%3E") no-repeat right .55rem center;
+        background-size: 9px;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        color: var(--text);
+        font-family: var(--font-body);
+        font-size: .8rem;
+        padding: .3rem 1.6rem .3rem .6rem;
+        cursor: pointer;
+        transition: border-color .2s;
+        width: 140px;
+      }
+      .inline-select:focus { outline: none; border-color: var(--accent); }
+      .inline-select:disabled { opacity: .4; cursor: not-allowed; }
+
+      /* Spinner on the row while saving */
+      .saving .inline-select { opacity: .5; pointer-events: none; }
+
+      /* ── Empty state ─────────────────────────────────────────── */
+      .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        color: var(--muted);
+      }
+      .empty-state i { font-size: 2.5rem; margin-bottom: 1rem; display: block; }
+
+      /* ── Responsive ──────────────────────────────────────────── */
+      @media (max-width: 900px) {
+        .table-card { overflow-x: auto; }
+      }
