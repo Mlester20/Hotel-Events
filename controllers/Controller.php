@@ -13,5 +13,4 @@
         abstract public function update($id, $data);
         abstract public function delete($id);
     }
-
 ?>

@@ -23,8 +23,8 @@
 
             // Check connection
             if($this->conn->connect_error){
-                // Handle connection error
-                die("Connection failed:" . $this->conn->connect_error);
+                // Throw exception instead of die
+                throw new Exception("Database connection failed: " . $this->conn->connect_error);
             }
             $this->conn->set_charset('utf8mb4');
         }
@@ -41,8 +41,15 @@
 
     }
 
-    //sample usage
-    $db = Database::getInstance();
-    $con = $db->getConnection();
+    // Initialize database connection
+    try {
+        $db = Database::getInstance();
+        $con = $db->getConnection();
+    } catch (Exception $e) {
+        // Log but don't die - let the calling code handle errors
+        error_log("Database initialization error: " . $e->getMessage());
+        // Create a flag that we can check
+        $con = null;
+    }
 
 ?>

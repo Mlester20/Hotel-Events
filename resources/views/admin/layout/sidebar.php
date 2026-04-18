@@ -112,16 +112,15 @@
         </li>
 
         <!-- Forms & Tables -->
-        <li class="menu-header mt-7"><span class="menu-header-text">User Accounts</span></li>
+        <li class="menu-header mt-7"><span class="menu-header-text">Reports</span></li>
 
         <li class="menu-item">
           <a href="javascript:void(0);" class="menu-link menu-toggle">
             <i class="menu-icon icon-base ri ri-radio-button-line"></i>
-            <div data-i18n="Form Elements">Accounts</div>
+            <div data-i18n="Form Elements">Activities Log</div>
           </a>
           <ul class="menu-sub">
-            <li class="menu-item"><a href="users.php" class="menu-link"><div>All Users</div></a></li>
-            <!-- <li class="menu-item"><a href="forms-input-groups.php" class="menu-link"><div>Input groups</div></a></li> -->
+            <li class="menu-item"><a href="activities-log.php" class="menu-link"><div>Activities Log</div></a></li>
           </ul>
         </li>
 

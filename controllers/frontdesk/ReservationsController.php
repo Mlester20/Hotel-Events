@@ -8,7 +8,6 @@ require_once __DIR__ . '/../BaseReservationsController.php';
         private ReservationsModel $model;
 
         public function __construct($con) {
-            // Pass the connection to the parent so BaseModel gets its argument
             parent::__construct($con); 
             
             $this->model = new ReservationsModel($con);
@@ -60,7 +59,6 @@ require_once __DIR__ . '/../BaseReservationsController.php';
         public function updateRoomPayment($booking_id, $payment_status): array {
             try {
                 $updated = $this->model->updatePayment($booking_id, $payment_status);
-
                 return [
                     'success' => $updated,
                     'message' => $updated
