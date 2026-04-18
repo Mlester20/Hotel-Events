@@ -1,15 +1,4 @@
 <?php
-/*
- * GET /api/available-rooms
- * Fetch available rooms based on check-in date, check-out date, and room type
- * 
- * Query Parameters:
- * - check_in_date (required): Y-m-d format
- * - check_out_date (required): Y-m-d format
- * - check_in_time (optional): H:i format
- * - room_type_id (optional): Filter by room type
- */
-
 header('Content-Type: application/json');
 header('Cache-Control: no-cache, no-store, must-revalidate');
 

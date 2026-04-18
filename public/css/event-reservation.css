@@ -1,0 +1,36 @@
+/* Event Reservation Form */
+#eventBookingForm .form-label {
+    font-weight: 600;
+    color: #555;
+}
+
+#eventBookingForm .form-control,
+#eventBookingForm .form-select {
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    transition: 0.2s ease;
+}
+
+#eventBookingForm .form-control:focus,
+#eventBookingForm .form-select:focus {
+    border-color: #8b8c5f;
+    box-shadow: 0 0 0 0.15rem rgba(139, 140, 95, 0.25);
+}
+
+#eventBookingForm textarea {
+    resize: none;
+}
+
+.btn-book {
+    background: #8b8c5f;
+    color: #fff;
+    border-radius: 6px;
+    padding: 10px 25px;
+    font-weight: 600;
+    border: none;
+}
+
+.btn-book:hover {
+    background: #6b6c4f;
+}
