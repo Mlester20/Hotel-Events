@@ -31,9 +31,9 @@ class ActivitiesLogController {
     }
 }
 
-$controller = new ActivitiesLogController($con);
-$data = $controller->index();
+    $controller = new ActivitiesLogController($con);
+    $data = $controller->index();
 
-$logs = $data['logs'];
-$currentPage = $data['currentPage'];
-$totalPages = $data['totalPages'];
+    $logs = $data['logs'];
+    $currentPage = $data['currentPage'];
+    $totalPages = $data['totalPages'];

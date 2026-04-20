@@ -68,15 +68,15 @@ require_once __DIR__ . '/../Controller.php';
             ]);
         }
 
-        if (isset($_POST['deleteRoomType'])) {
-            $roomTypesController->delete($_POST['id']);
-        }
-
         // Edit: all three fields present but no dedicated flag
         if (isset($_POST['id'], $_POST['title'], $_POST['details']) && !isset($_POST['deleteRoomType'])) {
             $roomTypesController->update($_POST['id'], [
                 'title'   => $_POST['title'],
                 'details' => $_POST['details'],
             ]);
+        }
+
+        if (isset($_POST['deleteRoomType'])) {
+            $roomTypesController->delete($_POST['id']);
         }
     }

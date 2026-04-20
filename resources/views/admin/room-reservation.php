@@ -100,6 +100,6 @@ allowOnly(['admin']); // allow only admin to access this page
     <script src="../../../public/assets/js/main.js"></script>
     <script src="../../../public/assets/js/dashboards-analytics.js"></script>
     <script async="async" defer="defer" src="https://buttons.github.io/buttons.js"></script>
-    <script src="../../../public/js/admin/room-types.js"></script>
+    <script src="../../../public/js/admin/reservations.js"></script>
 </body>
 </html>
