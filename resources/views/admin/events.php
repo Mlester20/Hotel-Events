@@ -49,7 +49,7 @@ allowOnly(['admin']);
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form method="POST" action="../../../controllers/admin/EventsController.php">
+                    <form method="POST" action="../../../controllers/admin/EventsController.php" enctype="multipart/form-data">
                         <div class="mb-3">
                             <label for="eventTitle" class="form-label">Event Title</label>
                             <input type="text" class="form-control" id="eventTitle" name="title" placeholder="Enter event title">
@@ -57,6 +57,11 @@ allowOnly(['admin']);
                         <div class="mb-3">
                             <label for="eventDescription" class="form-label">Description</label>
                             <textarea class="form-control" id="eventDescription" name="description" rows="3" placeholder="Enter event Description"></textarea>
+                        </div>
+                        <!-- Image Upload -->
+                        <div class="mb-3">
+                            <label for="eventImage" class="form-label">Event Image</label>
+                            <input type="file" class="form-control" id="eventImage" name="image">
                         </div>
                         <div class="mb-3">
                             <label for="eventLocation" class="form-label">Location</label>
@@ -88,7 +93,7 @@ allowOnly(['admin']);
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form method="POST" action="../../../controllers/admin/EventsController.php">
+                    <form method="POST" action="../../../controllers/admin/EventsController.php" enctype="multipart/form-data">
                         <input type="hidden" id="editEventId" name="id">
                         <div class="mb-3">
                             <label for="editEventTitle" class="form-label">Event Title</label>
@@ -99,6 +104,12 @@ allowOnly(['admin']);
                             <label for="editEventDescription" class="form-label">Description</label>
                             <textarea class="form-control" id="Editdescription" name="description" rows="3"
                                 placeholder="Enter event Description"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editEventImage" class="form-label">Event Image</label>
+                            <div id="editCurrentImage" class="mb-2"></div>
+                            <input type="file" class="form-control" id="editEventImage" name="image">
+                            <small class="text-muted">Leave blank to keep current image</small>
                         </div>
                         <div class="mb-3">
                             <label for="editEventLocation" class="form-label">Location</label>
@@ -141,6 +152,10 @@ allowOnly(['admin']);
                             <tr>
                                 <th class="text-muted fw-normal ps-0" style="width: 120px;">Description</th>
                                 <td id="viewDescription"></td>
+                            </tr>
+                            <tr>
+                                <th class="text-muted fw-normal ps-0">Image</th>
+                                <td><img id="viewImage" src="" alt="Event Image" style="max-width: 200px; max-height: 150px;"></td>
                             </tr>
                             <tr>
                                 <th class="text-muted fw-normal ps-0">Location</th>
@@ -196,7 +211,8 @@ allowOnly(['admin']);
                                             <?php echo json_encode($event["description"]); ?>,
                                             <?php echo json_encode($event["location"]); ?>,
                                             <?php echo $event["capacity"]; ?>,
-                                            <?php echo json_encode($event["price"]); ?>
+                                            <?php echo json_encode($event["price"]); ?>,
+                                            <?php echo json_encode($event["image"]); ?>
                                         )'>
                                         <i class="fas fa-pencil"></i>
                                     </button>
@@ -212,7 +228,8 @@ allowOnly(['admin']);
                                                 <?php echo json_encode($event["description"]); ?>,
                                                 <?php echo json_encode($event["location"]); ?>,
                                                 <?php echo $event["capacity"]; ?>,
-                                                <?php echo json_encode($event["price"]); ?>
+                                                <?php echo json_encode($event["price"]); ?>,
+                                                <?php echo json_encode($event["image"]); ?>
                                             )'>
                                             <i class="fas fa-eye"></i>
                                         </button>
@@ -222,7 +239,7 @@ allowOnly(['admin']);
                                         <input type="hidden" name="id" value="<?php echo $event['id']; ?>">
                                         
                                         <button 
-                                            name="deleteRoomType" 
+                                            name="deleteEvent" 
                                             class="btn btn-sm btn-danger" 
                                             onclick="return confirm('Are you sure?')">
                                             <i class="fas fa-trash"></i> 

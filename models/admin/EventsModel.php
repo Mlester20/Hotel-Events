@@ -24,15 +24,24 @@ require_once __DIR__ . '/../BaseModel.php';
             }
         }
 
+        //create a class method to store image in the database
+        public function storeImage($imageData){
+            $imageName = time() . '_' . $imageData['name'];
+            $imagePath = __DIR__ . '/../../storage/events/' . $imageName;
+            move_uploaded_file($imageData['tmp_name'], $imagePath);
+            return $imageName;
+        }
+
         public function create($data){
             try{
-                $query = "INSERT INTO {$this->events} (title, description, location, capacity, price) VALUES (?, ?, ?, ?, ?)";
+                $query = "INSERT INTO {$this->events} (title, description, image, location, capacity, price) VALUES (?, ?, ?, ?, ?, ?)";
                 
                 $stmt = $this->con->prepare($query);
                 $stmt->bind_param(
-                    "sssii", 
+                    "ssssii", 
                     $data['title'], 
                     $data['description'], 
+                    $data['image'], 
                     $data['location'], 
                     $data['capacity'], 
                     $data['price']
@@ -48,18 +57,32 @@ require_once __DIR__ . '/../BaseModel.php';
 
         public function update($id, $data){
             try{
-                $query = "UPDATE {$this->events} SET title = ?, description = ?, location = ?, capacity = ?, price = ? WHERE id = ?";
-                
-                $stmt = $this->con->prepare($query);
-                $stmt->bind_param(
-                    "sssiii", 
-                    $data['title'], 
-                    $data['description'], 
-                    $data['location'], 
-                    $data['capacity'], 
-                    $data['price'],
-                    $id
-                );
+                if (!empty($data['image'])) {
+                    $query = "UPDATE {$this->events} SET title = ?, description = ?, image = ?, location = ?, capacity = ?, price = ? WHERE id = ?";
+                    $stmt = $this->con->prepare($query);
+                    $stmt->bind_param(
+                        "sssssii", 
+                        $data['title'], 
+                        $data['description'], 
+                        $data['image'],
+                        $data['location'], 
+                        $data['capacity'], 
+                        $data['price'],
+                        $id
+                    );
+                } else {
+                    $query = "UPDATE {$this->events} SET title = ?, description = ?, location = ?, capacity = ?, price = ? WHERE id = ?";
+                    $stmt = $this->con->prepare($query);
+                    $stmt->bind_param(
+                        "sssii", 
+                        $data['title'], 
+                        $data['description'], 
+                        $data['location'], 
+                        $data['capacity'], 
+                        $data['price'],
+                        $id
+                    );
+                }
 
                 if(!$stmt->execute()){
                     throw new Exception("Failed to update event: " . $stmt->error);

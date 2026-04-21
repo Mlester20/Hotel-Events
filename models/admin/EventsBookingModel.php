@@ -7,7 +7,7 @@ require_once __DIR__ . '/../BaseModel.php';
         protected $event_bookings = 'event_bookings';
         protected $users = 'users';
 
-        public function get() {
+        public function index() {
             $query = "
                 SELECT 
                     eb.id,

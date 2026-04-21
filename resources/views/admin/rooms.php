@@ -58,7 +58,7 @@ allowOnly(['admin']); // allow only admin to access this page
                             <!-- Room Number -->
                             <div class="col-6">
                                 <label for="roomNumber" class="form-label mb-1">Room Number</label>
-                                <input type="text" class="form-control form-control-sm" id="roomNumber" name="number" placeholder="e.g. 101" required>
+                                <input type="text" class="form-control form-control-sm" id="roomNumber" name="room_number" placeholder="e.g. 101" required>
                             </div>
                             <!-- Room Type -->
                             <div class="col-6">

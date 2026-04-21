@@ -68,6 +68,22 @@ allowOnly(['admin']); // allow only admin to access this page
         </div>
     </div>
 
+    <!-- view modal -->
+    <div class="modal fade" id="viewHomeDescriptionModal" tabindex="-1" aria-labelledby="viewHomeDescriptionModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="viewHomeDescriptionModalLabel">View Home Description</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h6 id="viewTitle"></h6>
+                    <p id="viewContent"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- edit modal -->
     <div class="modal fade" id="editHomeDescriptionModal" tabindex="-1" aria-labelledby="editHomeDescriptionModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -102,7 +118,6 @@ allowOnly(['admin']); // allow only admin to access this page
                     <tr>
                         <th>#</th>
                         <th>Title</th>
-                        <th>Content</th>
                         <th>Status</th>
                         <th>Actions</th>
                     </tr>
@@ -111,7 +126,6 @@ allowOnly(['admin']); // allow only admin to access this page
                     <tr>
                         <td><?php echo $home_description['id']; ?></td>
                         <td><?php echo $home_description['title']; ?></td>
-                        <td><?php echo $home_description['content']; ?></td>
                         <td>
                             <?php if($home_description['is_active'] == 1): ?>
                                 <span class="badge bg-success">Active</span>
@@ -128,6 +142,16 @@ allowOnly(['admin']); // allow only admin to access this page
                                 data-title="<?php echo htmlspecialchars($home_description['title'], ENT_QUOTES, 'UTF-8'); ?>"
                                 data-content="<?php echo htmlspecialchars($home_description['content'], ENT_QUOTES, 'UTF-8'); ?>">
                                 Edit
+                            </button>
+
+                            <!-- view button that shows the full content -->
+                            <button class="btn btn-sm btn-info"
+                                data-bs-toggle="modal"
+                                data-bs-target="#viewHomeDescriptionModal"
+                                data-id="<?php echo $home_description['id']; ?>"
+                                data-title="<?php echo htmlspecialchars($home_description['title'], ENT_QUOTES, 'UTF-8'); ?>"
+                                data-content="<?php echo htmlspecialchars($home_description['content'], ENT_QUOTES, 'UTF-8'); ?>">
+                                View
                             </button>
 
                             <!-- delete -->
